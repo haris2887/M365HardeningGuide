@@ -45,6 +45,132 @@ body {
   overflow-x: hidden;
 }
 
+
+/* ─── SCANNER BANNER ─── */
+#scanner-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: linear-gradient(90deg, #0f1e38 0%, #0a1628 40%, #0d1f10 100%);
+  border-bottom: 1px solid rgba(34,197,94,0.35);
+  box-shadow: 0 1px 20px rgba(34,197,94,0.12);
+}
+.scanner-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  height: 44px;
+  max-width: 100%;
+}
+.scanner-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.scanner-banner-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green2, #22c55e);
+  box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
+  animation: scanner-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes scanner-pulse {
+  0%  { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+  60% { box-shadow: 0 0 0 7px rgba(34,197,94,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.scanner-banner-text {
+  font-size: 0.82rem;
+  color: var(--text-muted, #7a92b0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scanner-banner-text strong { color: #86efac; font-weight: 600; }
+.scanner-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 18px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  box-shadow: 0 0 16px rgba(34,197,94,0.3);
+}
+.scanner-banner-btn:hover {
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  box-shadow: 0 0 24px rgba(34,197,94,0.5);
+  transform: translateY(-1px);
+  color: #fff;
+}
+.scanner-banner-close {
+  background: none;
+  border: none;
+  color: var(--text-faint, #3d5474);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.scanner-banner-close:hover { color: var(--text-muted, #7a92b0); }
+
+/* ─── SCANNER HEADER BUTTON ─── */
+.hdr-divider-v {
+  width: 1px;
+  height: 28px;
+  background: var(--border-bright);
+  flex-shrink: 0;
+}
+.scanner-btn-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff !important;
+  text-decoration: none;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px rgba(34,197,94,0.25);
+  white-space: nowrap;
+}
+.scanner-btn-header:hover {
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  box-shadow: 0 0 20px rgba(34,197,94,0.45);
+  transform: translateY(-1px);
+}
+
+/* ─── ADJUST LAYOUT FOR BANNER ─── */
+#header { top: 44px; }
+#sidebar { top: calc(var(--header-h) + 44px); height: calc(100vh - var(--header-h) - 44px); }
+#main { margin-top: calc(var(--header-h) + 44px); }
+
+/* When banner is dismissed, JS sets display:none — restore layout */
+#scanner-banner[style*="display: none"] ~ #header,
+#scanner-banner[style*="display:none"] ~ #header { top: 0; }
+
 /* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--surface); }
@@ -887,11 +1013,29 @@ code {
 <body>
 
 <!-- ═══════════════ HEADER ═══════════════ -->
+<!-- SCANNER BANNER -->
+<div id="scanner-banner">
+  <div class="scanner-banner-inner">
+    <div class="scanner-banner-left">
+      <span class="scanner-banner-pulse"></span>
+      <span class="scanner-banner-text">
+        <strong>New:</strong> Automatically scan your M365 &amp; Intune tenant against all 24 controls in this guide
+      </span>
+    </div>
+    <a href="https://haris2887.github.io/o365SCANNER/" target="_blank" class="scanner-banner-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+      Launch Free Scanner
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    </a>
+    <button class="scanner-banner-close" onclick="document.getElementById('scanner-banner').style.display='none'" title="Dismiss">×</button>
+  </div>
+</div>
+
 <header id="header">
   <div class="logo-block">
     <div class="logo-text">e<span>S</span>entire</div>
     <div class="logo-divider"></div>
-    <div class="header-title">M365 & Intune Hardening Guide</div>
+    <div class="header-title">M365 &amp; Intune Hardening Guide</div>
   </div>
   <div class="header-spacer"></div>
   <div class="search-wrap">
@@ -903,6 +1047,12 @@ code {
     <span class="progress-pill-count" id="progress-count">0/24</span>
     <div class="progress-bar-mini"><div class="progress-bar-mini-fill" id="progress-fill"></div></div>
   </div>
+  <div class="hdr-divider-v"></div>
+  <a href="https://haris2887.github.io/o365SCANNER/" target="_blank" class="scanner-btn-header" title="Launch the M365 Security Scanner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Run Scanner
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+  </a>
 </header>
 
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
@@ -2223,6 +2373,30 @@ AuditLogs
 </main>
 
 <script>
+// ─── SCANNER BANNER DISMISS ───
+(function() {
+  const banner = document.getElementById('scanner-banner');
+  if (!banner) return;
+  const dismissed = sessionStorage.getItem('scanner-banner-dismissed');
+  if (dismissed) {
+    banner.style.display = 'none';
+    document.getElementById('header').style.top = '0';
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main');
+    if (sidebar) { sidebar.style.top = 'var(--header-h)'; sidebar.style.height = 'calc(100vh - var(--header-h))'; }
+    if (main) main.style.marginTop = 'var(--header-h)';
+  }
+  document.querySelector('.scanner-banner-close').addEventListener('click', function() {
+    banner.style.display = 'none';
+    sessionStorage.setItem('scanner-banner-dismissed', '1');
+    document.getElementById('header').style.top = '0';
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main');
+    if (sidebar) { sidebar.style.top = 'var(--header-h)'; sidebar.style.height = 'calc(100vh - var(--header-h))'; }
+    if (main) main.style.marginTop = 'var(--header-h)';
+  });
+})();
+
 // ═══════════════ DATA ═══════════════
 const cheatData = [
   { n:1,  title:'Role-Based MFA',      action:'FIDO2 for admins, push MFA for users',                effort:'4 hrs',  where:'Entra ID → Auth Methods + CA' },
